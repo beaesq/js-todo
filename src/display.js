@@ -16,6 +16,11 @@ const display = (() => {
     divName.classList.add('name');
     divName.textContent = 'to do';
     divLogo.appendChild(divName)
+
+    const divProjectTitle = document.createElement('div');
+    divProjectTitle.setAttribute('id', 'project-title');
+    divHeader.appendChild(divProjectTitle);
+
     divHeader.appendChild(divLogo);
     divContainer.appendChild(divHeader);
 
@@ -56,20 +61,61 @@ const display = (() => {
   };
 
   const projectTitle = (project) => {
-    let divHeader = document.getElementById('header');
+    let divProjectTitle = document.getElementById('project-title');
 
-    const divProjectTitle = document.createElement('div');
-    console.log(project.title);
     divProjectTitle.textContent = project.title;
-    divProjectTitle.classList.add('project-title');
-    divHeader.appendChild(divProjectTitle);
   };
 
   const hello = () => {
     console.log('hello');
   };
 
-  return { main, hello, allTodos, projectTitle };
+  const makeProjectModal = () => {
+    let divModal = document.createElement('div');
+    divModal.classList.add('modal');
+    divModal.setAttribute('id', 'project-modal');
+    
+    const divModalContent = document.createElement('div');
+    divModalContent.classList.add('modal-content');
+    
+    const divModalHeader = document.createElement('div');
+    divModalHeader.classList.add('heading');
+    divModalHeader.textContent = 'Add a new project';
+    divModalContent.appendChild(divModalHeader);
+    const spanClose = document.createElement('span');
+    spanClose.classList.add('close');
+    spanClose.setAttribute('id', 'close-project');
+    spanClose.innerHTML = '&times';
+    divModalContent.appendChild(spanClose);
+
+    const form = document.createElement('form');
+    form.setAttribute('id', 'form-project');
+    form.setAttribute('action', 'index.html');
+    form.setAttribute('method', 'post');
+
+    const labelTitle = document.createElement('label');
+    labelTitle.setAttribute('for', 'title');
+    labelTitle.setAttribute('id', 'project-title-label');
+    labelTitle.textContent = 'Project Title:';
+    form.appendChild(labelTitle);
+    const inputTitle = document.createElement('input');
+    inputTitle.setAttribute('type', 'text');
+    inputTitle.setAttribute('name', 'title');
+    inputTitle.setAttribute('id', 'project-title-input');
+    form.appendChild(inputTitle);
+    const btnSubmit = document.createElement('button');
+    btnSubmit.setAttribute('type', 'submit');
+    btnSubmit.setAttribute('id', 'project-submit');
+    btnSubmit.textContent = 'Add Project';
+    form.appendChild(btnSubmit);
+
+    divModalContent.appendChild(form);
+
+    divModal.appendChild(divModalContent);
+    document.body.appendChild(divModal);
+  };
+
+  return { main, hello, allTodos, projectTitle, makeProjectModal };
 
 })();
 

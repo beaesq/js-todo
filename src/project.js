@@ -1,7 +1,7 @@
 class Project {
   list = [];
 
-  constructor(title) {
+  constructor(title = 'New Project') {
     this.title = title;
   }
 
