@@ -13,12 +13,6 @@ const display = (() => {
     divHeader.appendChild(divName);
     divContainer.appendChild(divHeader);
 
-    const divFooter = document.createElement('div');
-    divFooter.classList.add('footer');
-    divFooter.setAttribute('id', 'footer');
-    divFooter.innerHTML = '2023';
-    divContainer.appendChild(divFooter);
-
     const divContent = document.createElement('div');
     divContent.classList.add('content');
     divContent.setAttribute('id', 'content');
@@ -28,7 +22,30 @@ const display = (() => {
   };
 
   const allTodos = (project) => {
+    let divContent = document.getElementById('content');
 
+    for (const todo of project) {
+      const divCard = document.createElement('div');
+      divCard.classList.add('card');
+      const divTitle = document.createElement('div');
+      divTitle.classList.add('title');
+      divTitle.textContent = todo.title;
+      divCard.appendChild(divTitle);
+      const divDescription = document.createElement('div');
+      divDescription.classList.add('description');
+      divDescription.textContent = todo.description;
+      divCard.appendChild(divDescription);
+      const divDueDate = document.createElement('div');
+      divDueDate.classList.add('dueDate');
+      divDueDate.textContent = todo.dueDate;
+      divCard.appendChild(divDueDate);
+      const divPriority = document.createElement('div');
+      divPriority.classList.add('priority');
+      divPriority.textContent = todo.priority;
+      divCard.appendChild(divPriority);
+
+      divContent.appendChild(divCard);
+    }
   };
 
   const hello = () => {
