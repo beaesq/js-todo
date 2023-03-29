@@ -3,6 +3,7 @@ import { Project } from './project.js';
 import { display } from './display.js';
 import './style.css';
 
+//--TESTING--
 console.log('start');
 
 let project = new Project('test project');
@@ -18,5 +19,8 @@ project.addTodo(new Item('new todo', 11, 1));
 project.list[3].description = 'stan loona';
 
 console.log(project.list);
+//-----------
+
 display.main();
-display.allTodos(project.list);
+display.projectTitle(project);
+display.allTodos(project);

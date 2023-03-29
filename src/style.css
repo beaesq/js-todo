@@ -39,9 +39,28 @@ body {
   height: 90px;
   display: grid;
   grid-auto-flow: column;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: auto 1fr auto;
   align-items: center;
   padding: 0px 20px;
+  grid-template-areas: "logo project-title links";
+  gap: 30px;
+}
+
+#header>.logo {
+  grid-area: logo;
+  font-size: 20px;
+  align-content: center;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 5px;
+}
+
+#header>.logo svg {
+  height: 20px;
+}
+
+#header>.project-title {
+  grid-area: project-title;
 }
 
 #content {
