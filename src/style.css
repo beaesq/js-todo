@@ -12,7 +12,7 @@
 
 
 body {
-  height: 100%;
+  height: 100vh;
   width: 100%;
   margin: 0px;
   padding: 0px;
@@ -20,33 +20,32 @@ body {
 
 #main {
   display: grid;
-  grid-template-areas: 
-    "header"
-    "content";
-  grid-template-rows: auto 1fr;
+  grid-template-areas: "sidebar content";
+  grid-template-columns: clamp(225px, 20%, 275px) 1fr;
+  grid-auto-flow: column;
   background-color: lightgreen;
   height: 100%;
   width: 100%;
 }
 
 
-#header {
-  grid-area: header;
-  position: sticky;
-  top: 0;
+#sidebar {
+  grid-area: sidebar;
+  
   background-color: lightblue;
   color: rgb(5, 15, 46);
-  height: 90px;
   display: grid;
-  grid-auto-flow: column;
-  grid-template-columns: auto 1fr auto;
+  grid-template-rows: 50px auto 1fr;
   align-items: center;
   padding: 0px 20px;
-  grid-template-areas: "logo project-title links";
+  grid-template-areas: 
+    "logo" 
+    "project-title" 
+    "links";
   gap: 30px;
 }
 
-#header>.logo {
+#sidebar>.logo {
   grid-area: logo;
   font-size: 20px;
   align-content: center;
@@ -55,11 +54,11 @@ body {
   gap: 5px;
 }
 
-#header>.logo svg {
+#sidebar>.logo svg {
   height: 20px;
 }
 
-#header>.project-title {
+#sidebar>.project-title {
   grid-area: project-title;
 }
 
@@ -69,7 +68,8 @@ body {
   padding: 100px;
 
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  align-content: flex-start;
   gap: 20px;
 }
 

@@ -4,9 +4,9 @@ const display = (() => {
     divContainer.classList.add('main');
     divContainer.setAttribute('id', 'main');
 
-    const divHeader = document.createElement('div');
-    divHeader.classList.add('header');
-    divHeader.setAttribute('id', 'header');
+    const divSidebar = document.createElement('div');
+    divSidebar.classList.add('sidebar');
+    divSidebar.setAttribute('id', 'sidebar');
     const divLogo = document.createElement('div');
     divLogo.classList.add('logo');
     const divIcon = document.createElement('div');
@@ -19,10 +19,10 @@ const display = (() => {
 
     const divProjectTitle = document.createElement('div');
     divProjectTitle.setAttribute('id', 'project-title');
-    divHeader.appendChild(divProjectTitle);
+    divSidebar.appendChild(divProjectTitle);
 
-    divHeader.appendChild(divLogo);
-    divContainer.appendChild(divHeader);
+    divSidebar.appendChild(divLogo);
+    divContainer.appendChild(divSidebar);
 
     const divContent = document.createElement('div');
     divContent.classList.add('content');
