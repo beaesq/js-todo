@@ -32,9 +32,33 @@ const start = () => {
   // next! idk clean this up
   
   display.main();
-  makeNewProject(); // remove this later, just make a default new project on first startup
+  makeNewProject(); // default project on startup
+  
+  // testing
+  projectList[0].addTodo(new Item('title1', 'date', '0', 'description'));
+  projectList[0].addTodo(new Item('title2', 'date', '0', 'description'));
+  projectList[0].addTodo(new Item('title3', 'date', '0', 'description'));
+
   display.projectTitle(projectList[currentProjectIndex]);
   display.allTodos(projectList[currentProjectIndex]);
+  setTodoCollapsible();
+};
+
+const setTodoCollapsible = () => {
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+  
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight){
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    });
+  }
 };
 
 const makeNewProject = (title = 'New Project') => {
