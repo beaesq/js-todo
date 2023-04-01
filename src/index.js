@@ -34,12 +34,29 @@ const start = () => {
   display.main();
   makeNewProject(); // default project on startup
   
-  // testing
+  // testing pit start
+
+  makeNewProject('project 2');
+  makeNewProject('project 3');
+  
   projectList[0].addTodo(new Item('title1', 'date', '0', 'description'));
   projectList[0].addTodo(new Item('title2', 'date', '0', 'description'));
   projectList[0].addTodo(new Item('title3', 'date', '0', 'description'));
 
-  display.projectTitle(projectList[currentProjectIndex]);
+  projectList[1].addTodo(new Item('title1', 'date', '0', 'description'));
+  projectList[1].addTodo(new Item('title2', 'date', '0', 'description'));
+  projectList[1].addTodo(new Item('title3', 'date', '0', 'description'));
+  projectList[1].addTodo(new Item('title4', 'date', '0', 'description'));
+
+  projectList[2].addTodo(new Item('title1', 'date', '0', 'description'));
+  projectList[2].addTodo(new Item('title2', 'date', '0', 'description'));
+  currentProjectIndex = 1;
+
+  // testing pit end
+  setSidebarListener();
+  
+  // refresh display; group these into one function later
+  display.projectTitles(projectList, currentProjectIndex);
   display.allTodos(projectList[currentProjectIndex]);
   setTodoCollapsible();
 };
@@ -61,12 +78,28 @@ const setTodoCollapsible = () => {
   }
 };
 
+const setSidebarListener = () => {
+  const divProjectList = document.getElementById('project-list');
+
+  divProjectList.addEventListener('click', (e) => {
+    if(e.target.classList.contains('title')) {
+      let index = e.target.getAttribute('index');
+      currentProjectIndex = index;
+
+      // reload displays
+      display.projectTitles(projectList, currentProjectIndex);
+      display.allTodos(projectList[currentProjectIndex]);
+      setTodoCollapsible();
+    }
+  });
+}
+
 const makeNewProject = (title = 'New Project') => {
   let project = new Project(title);
   projectList.push(project);
   console.log(projectList);
   currentProjectIndex = projectList.length - 1;
-  display.projectTitle(projectList[currentProjectIndex]);
+  display.projectTitles(projectList, currentProjectIndex);
   display.allTodos(projectList[currentProjectIndex]);
 }
 
