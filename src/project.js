@@ -18,7 +18,11 @@ class Project {
   }
 
   get list() {
-    return this.list;
+    return this._list;
+  }
+
+  set list(value) {
+    this._list = value;
   }
 }
 

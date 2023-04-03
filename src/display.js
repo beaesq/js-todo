@@ -7,6 +7,20 @@ const display = (() => {
     const divSidebar = document.createElement('div');
     divSidebar.classList.add('sidebar');
     divSidebar.setAttribute('id', 'sidebar');
+    divContainer.appendChild(divSidebar);
+
+    const divContent = document.createElement('div');
+    divContent.classList.add('content');
+    divContent.setAttribute('id', 'content');
+    divContainer.appendChild(divContent);
+
+    document.body.appendChild(divContainer);
+    addSidebarContent();
+  };
+
+  const addSidebarContent = () => {
+    const divSidebar = document.getElementById('sidebar');
+
     const divLogo = document.createElement('div');
     divLogo.classList.add('logo');
     const divIcon = document.createElement('div');
@@ -17,26 +31,53 @@ const display = (() => {
     divName.textContent = 'to do';
     divLogo.appendChild(divName)
 
-    const divProjectTitle = document.createElement('div');
-    divProjectTitle.setAttribute('id', 'project-title');
-    divSidebar.appendChild(divProjectTitle);
+    const divProjectList = document.createElement('div');
+    divProjectList.setAttribute('id', 'project-list');
 
+    const divButtonContainer = document.createElement('div');
+    divButtonContainer.setAttribute('id', 'project-list-buttons');
+        
     divSidebar.appendChild(divLogo);
-    divContainer.appendChild(divSidebar);
+    divSidebar.appendChild(divProjectList);
+    divSidebar.appendChild(divButtonContainer);
 
-    const divContent = document.createElement('div');
-    divContent.classList.add('content');
-    divContent.setAttribute('id', 'content');
-    divContainer.appendChild(divContent);
+    addProjectButtons();
+  }
 
-    document.body.appendChild(divContainer);
-  };
+  const addProjectButtons = () => {
+    const divAdd = document.createElement('div');
+    divAdd.classList.add('project-button', 'button-add-project');
+    const divAddIcon = document.createElement('div');
+    divAddIcon.classList.add('button-add-project');
+    divAddIcon.innerHTML = `<svg class='button-add-project' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><title>plus-box</title><path class='button-add-project' d="M12 16H10V12H6V10H10V6H12V10H16V12H12ZM18 20H4V19H3V18H2V4H3V3H4V2H18V3H19V4H20V18H19V19H18ZM17 18V17H18V5H17V4H5V5H4V17H5V18Z" /></svg>`;
+    const divAddText = document.createElement('div');
+    divAddText.classList.add('text', 'button-add-project');
+    divAddText.textContent = 'Add New Project';
+    
+    const divDelete = document.createElement('div');
+    divDelete.classList.add('project-button', 'button-delete-project');
+    const divDeleteIcon = document.createElement('div');
+    divDeleteIcon.classList.add('button-delete-project');
+    divDeleteIcon.innerHTML = `<svg class='button-delete-project' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><title>trash</title><path class='button-delete-project' d="M10 7V16H8V7H10M12 7H14V16H12V7M8 2H14V3H19V5H18V19H17V20H5V19H4V5H3V3H8V2M6 5V18H16V5H6Z" /></svg>`;
+    const divDeleteText = document.createElement('div');
+    divDeleteText.classList.add('text', 'button-delete-project');
+    divDeleteText.textContent = 'Delete Project';
+    
+    divAdd.appendChild(divAddIcon);
+    divAdd.appendChild(divAddText);
+    divDelete.appendChild(divDeleteIcon);
+    divDelete.appendChild(divDeleteText);
+
+    const divButtonContainer = document.getElementById('project-list-buttons');
+    divButtonContainer.appendChild(divAdd);
+    divButtonContainer.appendChild(divDelete);
+  }
 
   const allTodos = (project) => {
     let divContent = document.getElementById('content');
     divContent.innerHTML = '';
 
-    for (const todo of project.list) {
+    for (let [index, todo] of project.list.entries()) {
       const divCard = document.createElement('div');
       divCard.classList.add('card');
 
@@ -45,6 +86,8 @@ const display = (() => {
       btnCollapsible.classList.add('collapsible', 'todo-item');
       const divTitle = document.createElement('div');
       divTitle.classList.add('title');
+      divTitle.setAttribute('contenteditable', 'true');
+      divTitle.setAttribute('index', index);
       divTitle.textContent = todo.title;
       btnCollapsible.appendChild(divTitle);
       const divDueDate = document.createElement('div');
@@ -56,6 +99,8 @@ const display = (() => {
       divCollapsible.classList.add('collapsible-content');
       const divDescription = document.createElement('div');
       divDescription.classList.add('description');
+      divDescription.setAttribute('index', index);
+      divDescription.setAttribute('contenteditable', 'true');
       divDescription.textContent = todo.description;
       divCollapsible.appendChild(divDescription);
       const divPriority = document.createElement('div');
@@ -70,10 +115,20 @@ const display = (() => {
     }
   };
 
-  const projectTitle = (project) => {
-    let divProjectTitle = document.getElementById('project-title');
+  const projectTitles = (projectList, currentProjectIndex) => {
+    let divProjectList = document.getElementById('project-list');
+    divProjectList.innerHTML = '';
 
-    divProjectTitle.textContent = project.title;
+    for (let [index, project] of projectList.entries()) {
+      let divProjectTitle = document.createElement('div');
+      divProjectTitle.classList.add('title');
+      divProjectTitle.setAttribute('index', index);
+      if (index == currentProjectIndex) {
+        divProjectTitle.classList.add('current-project');
+      }
+      divProjectTitle.textContent = project.title;
+      divProjectList.appendChild(divProjectTitle);
+    }
   };
 
   const hello = () => {
@@ -125,7 +180,19 @@ const display = (() => {
     document.body.appendChild(divModal);
   };
 
-  return { main, hello, allTodos, projectTitle, makeProjectModal };
+  const addTodoButton = () => {
+    const divAddTodo = document.createElement('a');
+    divAddTodo.setAttribute('id', 'button-add-todo');
+    divAddTodo.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><title>plus</title><path d="M12 17H10V12H5V10H10V5H12V10H17V12H12Z" /></svg>`;
+    document.body.appendChild(divAddTodo);
+  }
+
+  const showProjectModal = () => { 
+    document.getElementById('project-modal').style.display = 'block';
+    document.getElementById('project-title-input').value = '';
+  }
+
+  return { main, hello, allTodos, projectTitles, makeProjectModal, showProjectModal, addTodoButton };
 
 })();
 

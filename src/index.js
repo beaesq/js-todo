@@ -28,9 +28,8 @@ console.log('start');
 const start = () => {
   // make modals
   setProjectModal();
-
-  // next! idk clean this up
-  
+  setAddTodoButton();
+ 
   display.main();
   makeNewProject(); // default project on startup
   
@@ -52,13 +51,13 @@ const start = () => {
   projectList[2].addTodo(new Item('title2', 'date', '0', 'description'));
   currentProjectIndex = 1;
 
+  setProjectButtonListener();
   // testing pit end
   setSidebarListener();
   
-  // refresh display; group these into one function later
-  display.projectTitles(projectList, currentProjectIndex);
-  display.allTodos(projectList[currentProjectIndex]);
-  setTodoCollapsible();
+  // refresh display
+  displayProjects();
+  displayTodos();
 };
 
 const setTodoCollapsible = () => {
@@ -87,20 +86,43 @@ const setSidebarListener = () => {
       currentProjectIndex = index;
 
       // reload displays
-      display.projectTitles(projectList, currentProjectIndex);
-      display.allTodos(projectList[currentProjectIndex]);
-      setTodoCollapsible();
+      displayProjects();
+      displayTodos();
     }
   });
+}
+
+const setProjectButtonListener = () => {
+  const divProjectButtons = document.getElementById('project-list-buttons');
+  
+  divProjectButtons.addEventListener('click', (e) => {
+    if(e.target.classList.contains('button-add-project')){
+      display.showProjectModal();
+    } else if(e.target.classList.contains('button-delete-project')){
+      deleteProject(currentProjectIndex);
+    }
+  });
+}
+
+const deleteProject = (index) => {
+  // alert if deleting last project
+  if(projectList.length == 1) {
+    alert('You can (not) delete');
+  } else {
+    projectList.splice(index, 1);
+    // set new current project index
+    currentProjectIndex = Math.max(0, currentProjectIndex - 1);
+    displayProjects();
+    displayTodos();
+  }
 }
 
 const makeNewProject = (title = 'New Project') => {
   let project = new Project(title);
   projectList.push(project);
-  console.log(projectList);
   currentProjectIndex = projectList.length - 1;
-  display.projectTitles(projectList, currentProjectIndex);
-  display.allTodos(projectList[currentProjectIndex]);
+  displayProjects();
+  displayTodos();
 }
 
 const setProjectModal = () => {
@@ -111,13 +133,6 @@ const setProjectModal = () => {
   const modal = document.getElementById('project-modal');
   const modalBtn = document.getElementById('btn-new-book'); // CHANGE THIS
   const modalClose = document.getElementById('close-project');
-
-  // modalBtn.onclick = function() {
-  //   modal.style.display = "block";
-    
-  //   // reset form to default
-  //   document.getElementById('project-title-input').value = '';
-  // }
 
   modalClose.onclick = function() {
     modal.style.display = 'none';
@@ -131,14 +146,56 @@ const setProjectModal = () => {
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
-    console.log('submit form');
     makeNewProject(form.elements['title'].value);
     modal.style.display = 'none';
     const content = document.getElementById('content');
     content.scrollTo(0, content.scrollHeight);
-    console.log(projectList[currentProjectIndex]);
   });
-
 };
+
+const setAddTodoButton = () => {
+  display.addTodoButton();
+
+  const divAddTodo = document.getElementById('button-add-todo');
+  divAddTodo.addEventListener('click', (e) => {
+    const newTodo = new Item('New To Do Item', 'date~', 'yes', 'Add a description here!');
+    projectList[currentProjectIndex].addTodo(newTodo);
+    displayTodos();
+  });
+}
+
+const displayTodos = () => {
+  display.allTodos(projectList[currentProjectIndex]);
+  setTodoCollapsible();
+  setEditingListeners();
+}
+
+const setEditingListeners = () => {
+  const divContent = document.getElementById('content');
+
+  const titles = divContent.getElementsByClassName('title');
+  for (const divTitle of titles) {
+    divTitle.addEventListener('focusout',(e) => {
+      const index = e.target.getAttribute('index');
+      const newTitle = e.target.textContent;
+      projectList[currentProjectIndex].list[index].title = newTitle;
+      displayTodos();
+    });
+  }
+
+  const descriptions = divContent.getElementsByClassName('description');
+  for (const divDescription of descriptions) {
+    divDescription.addEventListener('focusout',(e) => {
+      const index = e.target.getAttribute('index');
+      const newDescription = e.target.textContent;
+      projectList[currentProjectIndex].list[index].description = newDescription;
+      displayTodos();
+    });
+  }
+}
+
+const displayProjects = () => {
+  display.projectTitles(projectList, currentProjectIndex);
+}
 
 start();

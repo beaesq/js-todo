@@ -28,24 +28,23 @@ body {
   width: 100%;
 }
 
-
 #sidebar {
   grid-area: sidebar;
   
   background-color: lightblue;
   color: rgb(5, 15, 46);
   display: grid;
-  grid-template-rows: 50px auto 1fr;
+  grid-template-rows: 50px 1fr;
   align-items: center;
-  padding: 0px 20px;
   grid-template-areas: 
     "logo" 
-    "project-title" 
-    "links";
+    "project-list";
   gap: 30px;
+  height: 100%;
 }
 
 #sidebar>.logo {
+  padding: 0px 20px;
   grid-area: logo;
   font-size: 20px;
   align-content: center;
@@ -58,8 +57,63 @@ body {
   height: 20px;
 }
 
-#sidebar>.project-title {
-  grid-area: project-title;
+#project-list {
+  padding: 0px 20px;
+  grid-area: project-list;
+  display: grid;
+  align-content: flex-start;
+  gap: 10px;
+  place-self: start;
+}
+
+#project-list>div:hover {
+  cursor: default;
+  color: blue;
+  text-decoration: underline;
+}
+
+#project-list>div.current-project {
+  font-weight: bold;
+}
+
+#project-list>div.current-project:before {
+  content: '\02795'; /* Unicode character for "plus" sign (+) */
+  font-size: 13px;
+  color: white;
+  transform: translateX(-15px);
+  position: absolute;
+  display: inline-block;
+}
+
+#project-list-buttons {
+  padding-left: 0px;
+  position: sticky;
+  bottom: 0;
+  display: grid;
+  grid-auto-flow: column;
+  place-items: center;
+}
+
+#project-list-buttons>.project-button {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: auto 1fr;
+  place-items: center;
+  padding: 10px 5px;
+  gap: 10px;
+  cursor: default;
+}
+
+div.button-add-project {
+  background-color: greenyellow;
+}
+
+div.button-delete-project {
+  background-color: red;
+}
+
+#project-list-buttons svg {
+  height: 30px;
 }
 
 #content {
@@ -129,6 +183,7 @@ body {
 
 .card .description {
   grid-area: description;
+  overflow-wrap: break-word;
 }
 
 .card .dueDate {
@@ -159,4 +214,31 @@ body {
   padding: 20px;
   border: 1px solid lightcoral;
   width: 600px;
+}
+
+#button-add-todo {
+  position: fixed;
+	width: 60px;
+	height: 60px;
+	bottom: 40px;
+	right: 40px;
+	background-color: #0C9;
+	border-radius: 50px;
+	box-shadow: 2px 2px 3px #999;
+  display: grid;
+  place-items: center;
+}
+
+#button-add-todo:hover {
+  background-color: rgb(1, 153, 115);
+}
+
+#button-add-todo:active {
+  background-color: #0C9;
+}
+
+#button-add-todo>svg {
+  fill:#FFF;
+  height: 40px;
+  width: 40px;
 }
