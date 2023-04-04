@@ -1,3 +1,5 @@
+import { capitalize } from 'lodash';
+
 const display = (() => {
   const main = () => {
     let divContainer = document.createElement('div');
@@ -83,7 +85,7 @@ const display = (() => {
 
       const btnCollapsible = document.createElement('button');
       btnCollapsible.setAttribute('type', 'button');
-      btnCollapsible.classList.add('collapsible', 'todo-item');
+      btnCollapsible.classList.add('collapsible', 'todo-item', todo.priority);
       const divTitle = document.createElement('div');
       divTitle.classList.add('title');
       divTitle.setAttribute('contenteditable', 'true');
@@ -96,7 +98,7 @@ const display = (() => {
       btnCollapsible.appendChild(divDueDate);
 
       const divCollapsible = document.createElement('div');
-      divCollapsible.classList.add('collapsible-content');
+      divCollapsible.classList.add('collapsible-content', todo.priority);
       const divDescription = document.createElement('div');
       divDescription.classList.add('description');
       divDescription.setAttribute('index', index);
@@ -105,7 +107,8 @@ const display = (() => {
       divCollapsible.appendChild(divDescription);
       const divPriority = document.createElement('div');
       divPriority.classList.add('priority');
-      divPriority.textContent = todo.priority;
+      divPriority.setAttribute('index', index);
+      divPriority.textContent = `Priority: ${capitalize(todo.priority)}`;
       divCollapsible.appendChild(divPriority);
       
       divCard.appendChild(btnCollapsible);

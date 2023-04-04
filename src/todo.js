@@ -1,9 +1,6 @@
-class Item {
-  title = '';
-  description = '';
-  dueDate;
-  priority = 0;
+import { capitalize } from 'lodash';
 
+class Item {
   constructor(title, dueDate, priority, description = '') {
     this.title = title;
     this.dueDate = dueDate;
@@ -40,7 +37,58 @@ class Item {
   }
 
   set priority(value) {
-    this._priority = value;
+    value = Number.isInteger(value) ? value : value.toLowerCase();
+    switch (value) {
+      case 0:
+      case 'low':
+      case 'lo':
+        this._priority = 'low';
+        break;
+      case 1:
+      case 'medium':
+      case 'med':
+        this._priority = 'medium';
+        break;
+      case 2:
+      case 'high':
+      case 'hi':
+        this._priority = 'high';
+        break;
+      case 3:
+      case 'urgent':
+      case 'urg':
+        this._priority = 'urgent';
+        break;
+      default:
+        this._priority = 'low';
+        break;
+    }
+  }
+
+  togglePriority() {
+    let priorityNum = this.priorityTextToNum();
+    this.priority = (priorityNum + 1) % 4;
+  }
+
+  priorityTextToNum(priorityText = this.priority) {
+    priorityText = priorityText.toLowerCase();
+    switch (priorityText) {
+      case 'low':
+        return 0;
+        break;
+      case 'medium':
+        return 1;
+        break;
+      case 'high':
+        return 2;
+        break;
+      case 'urgent':
+        return 3;
+        break;            
+      default:
+        return 0;
+        break;
+    }
   }
 }
 

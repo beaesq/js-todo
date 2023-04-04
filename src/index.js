@@ -38,17 +38,17 @@ const start = () => {
   makeNewProject('project 2');
   makeNewProject('project 3');
   
-  projectList[0].addTodo(new Item('title1', 'date', '0', 'description'));
-  projectList[0].addTodo(new Item('title2', 'date', '0', 'description'));
-  projectList[0].addTodo(new Item('title3', 'date', '0', 'description'));
+  projectList[0].addTodo(new Item('title1', 'date', 0, 'description'));
+  projectList[0].addTodo(new Item('title2', 'date', 'urg', 'description'));
+  projectList[0].addTodo(new Item('title3', 'date', 2, 'description'));
 
-  projectList[1].addTodo(new Item('title1', 'date', '0', 'description'));
-  projectList[1].addTodo(new Item('title2', 'date', '0', 'description'));
-  projectList[1].addTodo(new Item('title3', 'date', '0', 'description'));
-  projectList[1].addTodo(new Item('title4', 'date', '0', 'description'));
+  projectList[1].addTodo(new Item('title1', 'date', 8, 'description'));
+  projectList[1].addTodo(new Item('title2', 'date', 'HI', 'description'));
+  projectList[1].addTodo(new Item('title3', 'date', 'med', 'description'));
+  projectList[1].addTodo(new Item('title4', 'date', 'dddd', 'description'));
 
-  projectList[2].addTodo(new Item('title1', 'date', '0', 'description'));
-  projectList[2].addTodo(new Item('title2', 'date', '0', 'description'));
+  projectList[2].addTodo(new Item('title1', 'date', 1, 'description'));
+  projectList[2].addTodo(new Item('title2', 'date', 3, 'description'));
   currentProjectIndex = 1;
 
   setProjectButtonListener();
@@ -164,13 +164,33 @@ const setAddTodoButton = () => {
   });
 }
 
-const displayTodos = () => {
+const displayTodos = (index = -1) => {
   display.allTodos(projectList[currentProjectIndex]);
   setTodoCollapsible();
   setEditingListeners();
+  if (index >= 0) {
+    let coll = document.getElementsByClassName("collapsible");
+    coll[index].classList.toggle('active');
+    let content = coll[index].nextElementSibling;
+    if (content.style.maxHeight){
+      content.style.maxHeight = null;
+    } else {
+      content.style.maxHeight = content.scrollHeight + "px";
+    }
+  }
 }
 
 const setEditingListeners = () => {
+  setTitleListeners();
+  setDescriptionListeners();
+  setPriorityListeners();
+}
+
+const displayProjects = () => {
+  display.projectTitles(projectList, currentProjectIndex);
+}
+
+const setTitleListeners = () => {
   const divContent = document.getElementById('content');
 
   const titles = divContent.getElementsByClassName('title');
@@ -182,20 +202,31 @@ const setEditingListeners = () => {
       displayTodos();
     });
   }
+}
 
+const setDescriptionListeners = () => {
+  const divContent = document.getElementById('content');
   const descriptions = divContent.getElementsByClassName('description');
   for (const divDescription of descriptions) {
     divDescription.addEventListener('focusout',(e) => {
       const index = e.target.getAttribute('index');
       const newDescription = e.target.textContent;
       projectList[currentProjectIndex].list[index].description = newDescription;
-      displayTodos();
+      displayTodos(index);
     });
   }
 }
 
-const displayProjects = () => {
-  display.projectTitles(projectList, currentProjectIndex);
+const setPriorityListeners = () => {
+  const divContent = document.getElementById('content');
+  const prioritylist = divContent.getElementsByClassName('priority');
+  for (const divPriority of prioritylist) {
+    divPriority.addEventListener('click', (e) => {
+      const index = e.target.getAttribute('index');
+      projectList[currentProjectIndex].list[index].togglePriority();
+      displayTodos(index);
+    });
+  }
 }
 
 start();

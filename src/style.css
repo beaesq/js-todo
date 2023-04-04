@@ -1,3 +1,22 @@
+:root {
+  --sidebar: #E0E0E0;
+  --background: white;
+  --urgent-title: #E57373;
+  --urgent-title-active: #EF5350;
+  --urgent-content: #EF9A9A;
+  --high-title: #FFB74D;
+  --high-title-active: #FFA726;
+  --high-content: #FFCC80;
+  --medium-title: #81C784;
+  --medium-title-active: #66BB6A;
+  --medium-content: #A5D6A7;
+  --low-title: #4FC3F7;
+  --low-title-active: #29B6F6;
+  --low-content: #81D4FA;
+  --add-project-button: #81C784;
+  --delete-project-button: #EF5350;
+}
+
 @font-face {
   font-family: 'Inconsolata';
   font-style: normal;
@@ -31,7 +50,7 @@ body {
 #sidebar {
   grid-area: sidebar;
   
-  background-color: lightblue;
+  background-color: var(--sidebar);
   color: rgb(5, 15, 46);
   display: grid;
   grid-template-rows: 50px 1fr;
@@ -105,11 +124,11 @@ body {
 }
 
 div.button-add-project {
-  background-color: greenyellow;
+  background-color: var(--add-project-button);
 }
 
 div.button-delete-project {
-  background-color: red;
+  background-color: var(--delete-project-button);
 }
 
 #project-list-buttons svg {
@@ -118,7 +137,7 @@ div.button-delete-project {
 
 #content {
   grid-area: content;
-  background-color: rgb(255, 255, 255);
+  background-color: var(--background);
   padding: 100px;
 
   display: grid;
@@ -166,7 +185,7 @@ div.button-delete-project {
 .collapsible:after {
   content: '\02795'; /* Unicode character for "plus" sign (+) */
   font-size: 13px;
-  color: white;
+  color: black;
   float: right;
   text-align: right;
 }
@@ -192,6 +211,59 @@ div.button-delete-project {
 
 .card .priority {
   grid-area: priority;
+  cursor: default;
+}
+
+.collapsible.urgent {
+  background-color: var(--urgent-title);
+}
+
+.collapsible.urgent:hover,
+.collapsible.urgent.active {
+  background-color: var(--urgent-title-active);
+}
+
+.collapsible-content.urgent {
+  background-color: var(--urgent-content);
+}
+
+.collapsible.high {
+  background-color: var(--high-title);
+}
+
+.collapsible.high:hover,
+.collapsible.high.active {
+  background-color: var(--high-title-active);
+}
+
+.collapsible-content.high {
+  background-color: var(--high-content);
+}
+
+.collapsible.medium {
+  background-color: var(--medium-title);
+}
+
+.collapsible.medium:hover,
+.collapsible.medium.active {
+  background-color: var(--medium-title-active);
+}
+
+.collapsible-content.medium {
+  background-color: var(--medium-content);
+}
+
+.collapsible.low {
+  background-color: var(--low-title);
+}
+
+.collapsible.low:hover,
+.collapsible.low.active {
+  background-color: var(--low-title-active);
+}
+
+.collapsible-content.low {
+  background-color: var(--low-content);
 }
 
 .modal {
@@ -209,10 +281,10 @@ div.button-delete-project {
 }
 
 .modal-content {
-  background-color: lightcoral;
+  background-color: var(--sidebar);
   margin: 15% auto;
   padding: 20px;
-  border: 1px solid lightcoral;
+  border: 1px solid var(--sidebar);
   width: 600px;
 }
 
@@ -222,23 +294,20 @@ div.button-delete-project {
 	height: 60px;
 	bottom: 40px;
 	right: 40px;
-	background-color: #0C9;
+	background-color: var(--low-title);
 	border-radius: 50px;
 	box-shadow: 2px 2px 3px #999;
   display: grid;
   place-items: center;
 }
 
-#button-add-todo:hover {
-  background-color: rgb(1, 153, 115);
-}
-
+#button-add-todo:hover,
 #button-add-todo:active {
-  background-color: #0C9;
+  background-color: var(--low-title-active);
 }
 
 #button-add-todo>svg {
-  fill:#FFF;
+  fill: black;
   height: 40px;
   width: 40px;
 }
