@@ -158,7 +158,7 @@ const setAddTodoButton = () => {
 
   const divAddTodo = document.getElementById('button-add-todo');
   divAddTodo.addEventListener('click', (e) => {
-    const newTodo = new Item('New To Do Item', 'date~', 'yes', 'Add a description here!');
+    const newTodo = new Item('New To Do Item', 'date~', 'default', 'Add a description here!');
     projectList[currentProjectIndex].addTodo(newTodo);
     displayTodos();
   });
