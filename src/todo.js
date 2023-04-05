@@ -1,7 +1,7 @@
-import { capitalize } from 'lodash';
+import { isDate } from 'date-fns';
 
 class Item {
-  constructor(title, dueDate, priority, description = '') {
+  constructor(title = 'New To Do', dueDate = new Date(), priority = 'default', description = 'empty description') {
     this.title = title;
     this.dueDate = dueDate;
     this.priority = priority;
@@ -24,12 +24,12 @@ class Item {
     this._description = value;
   }
 
-  get duedate() {
-    return this._duedate;
+  get dueDate() {
+    return this._dueDate;
   }
 
-  set duedate(value) {
-    this._duedate = value;
+  set dueDate(value) {
+    this._dueDate = value;
   }
 
   get priority() {

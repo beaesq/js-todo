@@ -2,6 +2,7 @@ import { Item } from './todo.js';
 import { Project } from './project.js';
 import { display } from './display.js';
 import './style.css';
+import { add } from 'date-fns';
 
 let projectList = [];
 let currentProjectIndex = 0;
@@ -28,6 +29,7 @@ console.log('start');
 const start = () => {
   // make modals
   setProjectModal();
+  setDueDateModal();
   setAddTodoButton();
  
   display.main();
@@ -38,17 +40,17 @@ const start = () => {
   makeNewProject('project 2');
   makeNewProject('project 3');
   
-  projectList[0].addTodo(new Item('title1', 'date', 0, 'description'));
-  projectList[0].addTodo(new Item('title2', 'date', 'urg', 'description'));
-  projectList[0].addTodo(new Item('title3', 'date', 2, 'description'));
+  projectList[0].addTodo(new Item('title1', new Date(), 0, 'description'));
+  projectList[0].addTodo(new Item('title2', new Date(), 'urg', 'description'));
+  projectList[0].addTodo(new Item('title3', new Date(), 2, 'description'));
 
-  projectList[1].addTodo(new Item('title1', 'date', 8, 'description'));
-  projectList[1].addTodo(new Item('title2', 'date', 'HI', 'description'));
-  projectList[1].addTodo(new Item('title3', 'date', 'med', 'description'));
-  projectList[1].addTodo(new Item('title4', 'date', 'dddd', 'description'));
+  projectList[1].addTodo(new Item('title1', new Date(), 8, 'description'));
+  projectList[1].addTodo(new Item('title2', new Date(), 'HI', 'description'));
+  projectList[1].addTodo(new Item('title3', new Date(), 'med', 'description'));
+  projectList[1].addTodo(new Item('title4', new Date(), 'dddd', 'description'));
 
-  projectList[2].addTodo(new Item('title1', 'date', 1, 'description'));
-  projectList[2].addTodo(new Item('title2', 'date', 3, 'description'));
+  projectList[2].addTodo(new Item('title1', new Date(), 1, 'description'));
+  projectList[2].addTodo(new Item('title2', new Date(), 3, 'description'));
   currentProjectIndex = 1;
 
   setProjectButtonListener();
@@ -125,13 +127,42 @@ const makeNewProject = (title = 'New Project') => {
   displayTodos();
 }
 
+const setDueDateModal = () => {
+  display.makeDueDateModal();
+
+  //set event listeners
+  const form = document.querySelector(`#form-dueDate`);
+  const modal = document.getElementById('dueDate-modal');
+  const modalClose = document.getElementById('close-dueDate');
+
+  modalClose.onclick = function() {
+    modal.style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const newDueDate = Date.parse(form.elements['dueDate'].value);
+    const index = form.elements['index'].value;
+    projectList[currentProjectIndex].list[index].dueDate = newDueDate;
+    modal.style.display = 'none';
+    const content = document.getElementById('content');
+    content.scrollTo(0, content.scrollHeight);
+    displayTodos();
+  });
+}
+
 const setProjectModal = () => {
   display.makeProjectModal();
 
   //set event listeners
   const form = document.querySelector(`#form-project`);
   const modal = document.getElementById('project-modal');
-  const modalBtn = document.getElementById('btn-new-book'); // CHANGE THIS
   const modalClose = document.getElementById('close-project');
 
   modalClose.onclick = function() {
@@ -158,7 +189,7 @@ const setAddTodoButton = () => {
 
   const divAddTodo = document.getElementById('button-add-todo');
   divAddTodo.addEventListener('click', (e) => {
-    const newTodo = new Item('New To Do Item', 'date~', 'default', 'Add a description here!');
+    const newTodo = new Item('New To Do Item', add(new Date(), {hours: 1}), 'default', 'Add a description here!');
     projectList[currentProjectIndex].addTodo(newTodo);
     displayTodos();
   });
@@ -184,6 +215,7 @@ const setEditingListeners = () => {
   setTitleListeners();
   setDescriptionListeners();
   setPriorityListeners();
+  setDueDateListeners();
 }
 
 const displayProjects = () => {
@@ -225,6 +257,17 @@ const setPriorityListeners = () => {
       const index = e.target.getAttribute('index');
       projectList[currentProjectIndex].list[index].togglePriority();
       displayTodos(index);
+    });
+  }
+}
+
+const setDueDateListeners = () => {
+  const divContent = document.getElementById('content');
+  const dueDateButtons = divContent.getElementsByClassName('edit-dueDate');
+  for (const divDueDate of dueDateButtons) {
+    divDueDate.addEventListener('click', (e) => {
+      const index = e.target.getAttribute('index');
+      display.showDueDateModal(index);
     });
   }
 }
