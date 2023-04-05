@@ -1,5 +1,3 @@
-import { isDate } from 'date-fns';
-
 class Item {
   constructor(title = 'New To Do', dueDate = new Date(), priority = 'default', description = 'empty description') {
     this.title = title;

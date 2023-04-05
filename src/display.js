@@ -1,5 +1,5 @@
 import { capitalize } from 'lodash';
-import { format, formatISO } from 'date-fns';
+import { format } from 'date-fns';
 
 const display = (() => {
   const main = () => {
