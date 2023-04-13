@@ -17,6 +17,10 @@ class Project {
     this.list.push(todo);
   }
 
+  deleteTodo(index) {
+    this.list.splice(index, 1);
+  }
+
   get list() {
     return this._list;
   }

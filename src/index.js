@@ -216,6 +216,7 @@ const setEditingListeners = () => {
   setDescriptionListeners();
   setPriorityListeners();
   setDueDateListeners();
+  setDeleteListeners();
 }
 
 const displayProjects = () => {
@@ -268,6 +269,18 @@ const setDueDateListeners = () => {
     divDueDate.addEventListener('click', (e) => {
       const index = e.target.getAttribute('index');
       display.showDueDateModal(index);
+    });
+  }
+}
+
+const setDeleteListeners = () => {
+  const divContent = document.getElementById('content');
+  const deleteButtons = divContent.getElementsByClassName('delete');
+  for (const divDelete of deleteButtons) {
+    divDelete.addEventListener('click', (e) => {
+      const index = e.target.getAttribute('index');
+      projectList[currentProjectIndex].deleteTodo(index);
+      displayTodos();
     });
   }
 }

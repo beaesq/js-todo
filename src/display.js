@@ -119,7 +119,7 @@ const display = (() => {
       const divButtonDelete = document.createElement('div');
       divButtonDelete.classList.add('delete');
       divButtonDelete.setAttribute('index', index);
-      divButtonDelete.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><title>trash</title><path d="M10 7V16H8V7H10M12 7H14V16H12V7M8 2H14V3H19V5H18V19H17V20H5V19H4V5H3V3H8V2M6 5V18H16V5H6Z" /></svg>`;
+      divButtonDelete.innerHTML = `<svg index=${index} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 22"><title>trash</title><path index=${index} d="M10 7V16H8V7H10M12 7H14V16H12V7M8 2H14V3H19V5H18V19H17V20H5V19H4V5H3V3H8V2M6 5V18H16V5H6Z" /></svg>`;
       divCollapsible.appendChild(divButtonDelete);
       
       
