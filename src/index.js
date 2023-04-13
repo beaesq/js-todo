@@ -7,24 +7,6 @@ import { add } from 'date-fns';
 let projectList = [];
 let currentProjectIndex = 0;
 
-//--TESTING--
-console.log('start');
-
-// let project = new Project('test project');
-
-// project.addTodo(new Item('new todo', 11, 1));
-
-// project.list[0].description = 'stan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loonastan loona';
-// project.addTodo(new Item('new todo', 11, 1));
-// project.list[1].description = 'stan loona';
-// project.addTodo(new Item('new todo', 11, 1));
-// project.list[2].description = 'stan loona';
-// project.addTodo(new Item('new todo', 11, 1));
-// project.list[3].description = 'stan loona';
-
-// console.log(project.list);
-//-----------
-
 // startup
 const start = () => {
   // make modals
@@ -33,34 +15,55 @@ const start = () => {
   setAddTodoButton();
  
   display.main();
-  makeNewProject(); // default project on startup
-  
-  // testing pit start
+  load();
 
-  makeNewProject('project 2');
-  makeNewProject('project 3');
-  
-  projectList[0].addTodo(new Item('title1', new Date(), 0, 'description'));
-  projectList[0].addTodo(new Item('title2', new Date(), 'urg', 'description'));
-  projectList[0].addTodo(new Item('title3', new Date(), 2, 'description'));
-
-  projectList[1].addTodo(new Item('title1', new Date(), 8, 'description'));
-  projectList[1].addTodo(new Item('title2', new Date(), 'HI', 'description'));
-  projectList[1].addTodo(new Item('title3', new Date(), 'med', 'description'));
-  projectList[1].addTodo(new Item('title4', new Date(), 'dddd', 'description'));
-
-  projectList[2].addTodo(new Item('title1', new Date(), 1, 'description'));
-  projectList[2].addTodo(new Item('title2', new Date(), 3, 'description'));
-  currentProjectIndex = 1;
-
+  // after making the sidebar
   setProjectButtonListener();
-  // testing pit end
   setSidebarListener();
   
   // refresh display
   displayProjects();
   displayTodos();
 };
+
+const load = () => {
+  let projects = JSON.parse(localStorage.getItem('projects'));
+
+  if (projects === null) {  // if no projects found
+    makeNewProject('New Project');
+  } else {
+    for (const project of projects) {
+      makeNewProject(project.projectTitle);
+      for (const todo of project.todos) {
+        const newTodo = new Item(todo.title, new Date(todo.dueDate), todo.priority, todo.description);
+        projectList[currentProjectIndex].addTodo(newTodo);
+      }
+    }
+  }
+  
+}
+
+const save = () => {
+  const projects = [];
+
+  for (const project of projectList) {
+    const newProject = {};
+    const todos = [];
+    for (const item of project.list) {
+      const newItem = {};
+      newItem.title = item.title;
+      newItem.description = item.description;
+      newItem.dueDate = item.dueDate;
+      newItem.priority = item.priority;
+      todos.push(newItem);
+    }
+
+    newProject.projectTitle = project.title;
+    newProject.todos = todos;
+    projects.push(newProject);
+  }
+  localStorage.setItem('projects', JSON.stringify(projects));
+}
 
 const setTodoCollapsible = () => {
   var coll = document.getElementsByClassName("collapsible");
@@ -116,6 +119,7 @@ const deleteProject = (index) => {
     currentProjectIndex = Math.max(0, currentProjectIndex - 1);
     displayProjects();
     displayTodos();
+    save();
   }
 }
 
@@ -123,8 +127,6 @@ const makeNewProject = (title = 'New Project') => {
   let project = new Project(title);
   projectList.push(project);
   currentProjectIndex = projectList.length - 1;
-  displayProjects();
-  displayTodos();
 }
 
 const setDueDateModal = () => {
@@ -154,6 +156,7 @@ const setDueDateModal = () => {
     const content = document.getElementById('content');
     content.scrollTo(0, content.scrollHeight);
     displayTodos();
+    save();
   });
 }
 
@@ -181,6 +184,9 @@ const setProjectModal = () => {
     modal.style.display = 'none';
     const content = document.getElementById('content');
     content.scrollTo(0, content.scrollHeight);
+    displayProjects();
+    displayTodos();
+    save();
   });
 };
 
@@ -192,6 +198,7 @@ const setAddTodoButton = () => {
     const newTodo = new Item('New To Do Item', add(new Date(), {hours: 1}), 'default', 'Add a description here!');
     projectList[currentProjectIndex].addTodo(newTodo);
     displayTodos();
+    save();
   });
 }
 
@@ -233,6 +240,7 @@ const setTitleListeners = () => {
       const newTitle = e.target.textContent;
       projectList[currentProjectIndex].list[index].title = newTitle;
       displayTodos();
+      save();
     });
   }
 }
@@ -246,6 +254,7 @@ const setDescriptionListeners = () => {
       const newDescription = e.target.textContent;
       projectList[currentProjectIndex].list[index].description = newDescription;
       displayTodos(index);
+      save();
     });
   }
 }
@@ -258,6 +267,7 @@ const setPriorityListeners = () => {
       const index = e.target.getAttribute('index');
       projectList[currentProjectIndex].list[index].togglePriority();
       displayTodos(index);
+      save();
     });
   }
 }
@@ -281,6 +291,7 @@ const setDeleteListeners = () => {
       const index = e.target.getAttribute('index');
       projectList[currentProjectIndex].deleteTodo(index);
       displayTodos();
+      save();
     });
   }
 }

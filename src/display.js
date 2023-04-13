@@ -95,6 +95,7 @@ const display = (() => {
       btnCollapsible.appendChild(divTitle);
       const divDueDate = document.createElement('div');
       divDueDate.classList.add('dueDate');
+      console.log(todo.dueDate);
       divDueDate.textContent = format(todo.dueDate, 'MMM-dd-yyyy HH:mm aa');
       btnCollapsible.appendChild(divDueDate);
 
