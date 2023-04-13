@@ -70,6 +70,7 @@ body {
   display: grid;
   grid-auto-flow: column;
   gap: 5px;
+  cursor: default;
 }
 
 #sidebar>.logo svg {
@@ -302,6 +303,46 @@ div.button-delete-project {
   padding: 20px;
   border: 1px solid var(--sidebar);
   width: 600px;
+  display: grid;
+  grid-template-areas: 
+  "heading close"
+  "form form";
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto minmax(100px, auto);
+  gap: 20px;
+}
+
+.modal-content>.heading {
+  grid-area: heading;
+}
+
+.modal-content>.close {
+  grid-area: close;
+  cursor: default;
+}
+
+.modal-content>form {
+  grid-area: form;
+  display: grid;
+  grid-template-areas: 
+  "label input"
+  "button button";
+  place-items: center;
+  gap: 10px;
+}
+
+.modal-content>form>label {
+  grid-area: label;
+  place-self: center right;
+}
+
+.modal-content>form>input {
+  grid-area: input;
+  place-self: center left
+}
+
+.modal-content>form>button {
+  grid-area: button;
 }
 
 #button-add-todo {
